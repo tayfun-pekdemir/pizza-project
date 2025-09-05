@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Form, FormGroup, Label, Input, Button, FormFeedback } from "reactstrap";
-
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 export default function OrderPage () {
 
     const pizzaPrice = 85.5;
     const extras = ["Pepperoni","Sosis","Kanada Jambonu","Tavuk Izgara","Soğan","Domates","Mısır","Sucuk","Jalepeno","Sarımsak","Biber","Maydonoz","Ananas","Kabak"] ;
+
+    const history = useHistory();
 
     const [ formData, setFormData ] = useState({
         name:"",
@@ -71,24 +74,37 @@ export default function OrderPage () {
          setIsValid(validName && validSize && validDough && validSelectedExtras);
     },[formData])
 
+    const handleSubmit =(event)=>{
+        event.preventDefault();
+        axios.post("https://reqres.in/api/pizza",formData,{headers:{"x-api-key": "reqres-free-v1"}})
+        .then(response => {
+            console.log(response.data)
+            history.push("/success")
+        })
+        .catch(error => {
+            console.error(error)
+            alert("Sipariş gönderilemedi. Lütfen tekrar deneyin.")
+        })
+    }
+
     return(
         
         <>
             <h2>{pizzaPrice}₺</h2>
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 {/* Pizza Boyutu */}
                 <FormGroup>
                     <Label>Boyut Seç <span style={{ color: "red", fontWeight: "bold" }}>*</span></Label>
                     <FormGroup check>
-                        <Input type="radio" name="size" id="sizeSmall" value="small" checked = {formData.size==="small"} onChange={handleChange}/>
+                        <Input type="radio" name="size" id="sizeSmall" value="small" checked = {formData.size==="small"} onChange={handleChange} required/>
                         <Label check htmlFor="sizeSmall">Küçük</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Input type="radio" name="size" id="sizeMedium" value="medium" checked = {formData.size==="medium"} onChange={handleChange}/>
+                        <Input type="radio" name="size" id="sizeMedium" value="medium" checked = {formData.size==="medium"} onChange={handleChange} required/>
                         <Label check htmlFor="sizeMedium">Orta</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Input type="radio" name="size" id="sizeLarge" value="large" checked = {formData.size==="large"} onChange={handleChange}/>
+                        <Input type="radio" name="size" id="sizeLarge" value="large" checked = {formData.size==="large"} onChange={handleChange} required/>
                         <Label check htmlFor="sizeLarge">Büyük</Label>
                     </FormGroup>
                     {errors.sizeError && (
@@ -100,7 +116,7 @@ export default function OrderPage () {
                 {/* Hamur Seç */}
                 <FormGroup>
                     <Label htmlFor="dough">Hamur Seç <span style={{ color: "red", fontWeight: "bold" }}>*</span></Label>
-                    <Input id="dough" name="dough" type="select" value={formData.dough} onChange={handleChange}>
+                    <Input id="dough" name="dough" type="select" value={formData.dough} onChange={handleChange} required>
                         <option value="" disabled>Hamur Kalınlığı</option>
                         <option value="thin">İnce Hamur</option>
                         <option value="extra-thin">Extra İnce Hamur</option>
@@ -139,8 +155,8 @@ export default function OrderPage () {
                 
                 {/*İsim alanı */}
                 <FormGroup>
-                    <Label htmlFor="name">İsim</Label>
-                    <Input type="text" id="name" name="name" value={formData.name} onChange={handleChange} invalid={errors.nameError}></Input>
+                    <Label htmlFor="name">İsim<span style={{ color: "red", fontWeight: "bold" }}>*</span></Label>
+                    <Input type="text" id="name" name="name" value={formData.name} onChange={handleChange} invalid={errors.nameError}  required></Input>
                      <FormFeedback>{errors.nameError}</FormFeedback>
                 </FormGroup>
 
