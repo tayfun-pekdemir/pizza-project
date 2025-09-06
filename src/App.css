@@ -43,3 +43,34 @@
   width: 19vw;
   height: auto;
 }
+
+/*SuccessPage styles*/
+
+.success-page {
+  background-color: #CE2829;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 6rem;
+  gap: 3rem;
+}
+
+.success-page h1 {
+  text-align: center;
+  font-family: "Roboto Condensed", sans-serif;
+  color: #FAF7F2;
+  font-weight: 300;
+  font-size: 7.2rem;
+  line-height: 1.1;
+  margin: auto;
+}
+
+.success-page img {
+  width: 19vw;
+  height: auto;
+  margin-top:5rem;
+}
