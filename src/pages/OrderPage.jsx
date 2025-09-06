@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, FormGroup, Label, Input, Button, FormFeedback } from "reactstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+
 export default function OrderPage () {
 
     const pizzaPrice = 85.5;
@@ -44,10 +45,10 @@ export default function OrderPage () {
     /*Seçimler */
     useEffect(()=>{
         setSelecteds(formData.selectedExtras.length * 5)
-    },[formData.selectedExtras]);
+    },[ formData.selectedExtras ]);
 
     const decreaseQuantity = () => {
-        setFormData({...formData,quantity: formData.quantity >1 ? formData.quantity - 1 : 1 })
+        setFormData({...formData,quantity: formData.quantity > 1 ? formData.quantity - 1 : 1 })
     }
     const increaseQuantity = () => {
         setFormData({...formData,quantity: formData.quantity + 1 })
@@ -55,8 +56,8 @@ export default function OrderPage () {
     
     /* Toplam tutar */
     useEffect(()=>{
-        setTotalPrice(formData.quantity*(selecteds+pizzaPrice))
-    },[formData.quantity,selecteds])
+        setTotalPrice(formData.quantity*( selecteds + pizzaPrice ))
+    },[ formData.quantity,selecteds ])
     
     /*validasyon*/
     useEffect(()=>{
@@ -155,7 +156,7 @@ export default function OrderPage () {
                 
                 {/*İsim alanı */}
                 <FormGroup>
-                    <Label htmlFor="name">İsim<span style={{ color: "red", fontWeight: "bold" }}>*</span></Label>
+                    <Label htmlFor="name">İsim<span style={{ color: "red", fontWeight: "bold" }}> *</span></Label>
                     <Input type="text" id="name" name="name" value={formData.name} onChange={handleChange} invalid={errors.nameError}  required></Input>
                      <FormFeedback>{errors.nameError}</FormFeedback>
                 </FormGroup>
