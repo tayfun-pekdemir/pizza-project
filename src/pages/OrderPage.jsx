@@ -61,7 +61,7 @@ export default function OrderPage() {
 
     /*validasyon*/
     useEffect(() => {
-        const validName = formData.name.trim().length >= 3;
+        const validName = formData.name && formData.name.trim().length >= 3;
         const validSize = formData.size !== "";
         const validDough = formData.dough !== "";
         const validSelectedExtras = formData.selectedExtras.length <= 10 && formData.selectedExtras.length >= 4;
@@ -163,7 +163,8 @@ export default function OrderPage() {
                                             id={`extra-${index}`}
                                             checked={formData.selectedExtras.includes(e)}
                                             onChange={handleChange}
-                                            disabled={!formData.selectedExtras.includes(e) && formData.selectedExtras.length >= 10} />
+                                            disabled={!formData.selectedExtras.includes(e) && formData.selectedExtras.length >= 10} 
+                                            />
                                         <Label check htmlFor={`extra-${index}`}>{e}</Label>
                                     </FormGroup>
                                 ))}
@@ -178,7 +179,10 @@ export default function OrderPage() {
                         <FormGroup className="name-input">
                             <Label className="form-heading" htmlFor="name">İsim<span className="required" > *</span></Label>
                             <Input type="text" id="name" name="name" value={formData.name} onChange={handleChange} invalid={errors.nameError !== ""} required></Input>
-                            <FormFeedback>{errors.nameError}</FormFeedback>
+                            {errors.nameError && (
+                                    <FormFeedback >
+                                        {errors.nameError}
+                                    </FormFeedback>)}
                         </FormGroup>
 
                         {/* Sipariş Notu */}
@@ -189,17 +193,19 @@ export default function OrderPage() {
                                 name="orderNote"
                                 type="textarea"
                                 placeholder="Siparişine eklemek istediğin bir not var mı?"
-                                value={formData.note}
+                                value={formData.orderNote}
                                 onChange={handleChange}
 
                             />
 
                         </FormGroup>
                         <hr />
-                        <div className="form-rowgroup">
-                            {/* Adet Sayacı */}
-                            <FormGroup className="quantity-container">
-                                <Button className="dec-button" type="button" onClick={decreaseQuantity}>-</Button>
+                        <div className="submit-quantity-total-wrapper">
+
+                            {/* Adet ve Submit */}
+                            <div className="quantity-container" >
+                                <FormGroup className="quantity-btn-input">
+                                <Button className="dec-button mb-0" type="button" onClick={decreaseQuantity}>-</Button>
                                 <Input
                                     id="quantity"
                                     name="quantity"
@@ -208,26 +214,30 @@ export default function OrderPage() {
                                     value={formData.quantity}
                                     readOnly
                                 />
-                                <Button className="inc-button" type="button" onClick={increaseQuantity}>+</Button>
-                            </FormGroup>
-                            <div className="form-colgroup">
-                                {/* Toplam Fiyat */}
-                                <div className="totalprice-section">
-                                    <FormGroup>
-                                        <h3 className="form-heading">Sipariş Toplamı</h3>
-                                        <div className="row-selecteds">
-                                            <span className="selecteds-text">Seçimler</span>
-                                            <span className="selecteds-price">{selecteds}₺</span>
-                                        </div>
-                                        <div className="row-total" >
-                                            <span className="total-text">Toplam</span>
-                                            <span className="total-price">{totalPrice.toFixed(2)}₺</span>
-                                        </div>
-                                    </FormGroup>
+                                <Button className="inc-button mb-0" type="button" onClick={increaseQuantity}>+</Button>
+                                </FormGroup>
+                            </div>
+
+                            {/* Toplam Fiyat */}
+                            <div className="totalprice-container">
+                                <FormGroup>
+                                <h3 className="form-heading">Sipariş Toplamı</h3>
+                                <div className="row-selecteds">
+                                    <span className="selecteds-text">Seçimler</span>
+                                    <span className="selecteds-price">{selecteds}₺</span>
                                 </div>
-                                <Button className="submit-button" type="submit" disabled={!isValid}>
+                                <div className="row-total">
+                                    <span className="total-text">Toplam</span>
+                                    <span className="total-price">{totalPrice.toFixed(2)}₺</span>
+                                </div>
+                                </FormGroup>
+                            </div>
+
+                            {/* Submit Button */}      
+                            <div className="submitbutton-container">
+                                    <Button className="submitbutton" type="submit" disabled={!isValid}>
                                     SİPARİŞ VER
-                                </Button>
+                                    </Button>
                             </div>
                         </div>
                     </Form>
