@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Form, FormGroup, Label, Input, Button, FormFeedback } from "reactstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import TotalPriceBox from "../components/TotalPriceBox";
 
-export default function OrderPage() {
+export default function OrderPage({setOrder}) {
 
     const pizzaPrice = 85.50
     const extras = ["Pepperoni", "Sosis", "Kanada Jambonu", "Tavuk Izgara", "Soğan", "Domates", "Mısır", "Sucuk", "Jalepeno", "Sarımsak", "Biber", "Maydonoz", "Ananas", "Kabak"];
-
+    const product = "Position Absolute Acı Pizza" ;
     const history = useHistory();
 
     const [formData, setFormData] = useState({
@@ -79,12 +80,19 @@ export default function OrderPage() {
         event.preventDefault();
         axios.post("https://reqres.in/api/pizza", formData, { headers: { "x-api-key": "reqres-free-v1" } })
             .then(response => {
-                console.log(response.data)
-                history.push("/success")
+                console.log(response.data) ;
+                const orderData = {
+                    ...response.data,
+                    totalPrice,
+                    selecteds,
+                    product
+                };
+                setOrder(orderData) ;
+                history.push("/success") ;
             })
             .catch(error => {
-                console.error(error)
-                alert("Sipariş gönderilemedi. Lütfen tekrar deneyin.")
+                console.error(error) ;
+                alert("Sipariş gönderilemedi. Lütfen tekrar deneyin.") ;
             })
     }
 
@@ -96,7 +104,7 @@ export default function OrderPage() {
             </header>
             <section className="order-container">
                 <div className="order-detail">
-                    <h2 className="form-heading">Position Absolute Acı Pizza</h2>
+                    <h2 className="form-heading">{product}</h2>
                     <div className="orderdetail-row">
                         <p className="order-price">{pizzaPrice.toFixed(2)}₺</p><span className="rating">4.9</span> <span className="comments-count">(200)</span>
                     </div>
@@ -112,15 +120,15 @@ export default function OrderPage() {
                             <FormGroup className="size-section">
                                 <Label className="form-heading">Boyut Seç <span className="required" >*</span></Label>
                                 <FormGroup check>
-                                    <Input type="radio" name="size" id="sizeSmall" value="small" checked={formData.size === "small"} onChange={handleChange} required />
+                                    <Input type="radio" name="size" id="sizeSmall" value="Küçük" checked={formData.size === "Küçük"} onChange={handleChange} required />
                                     <Label check htmlFor="sizeSmall" className="order-text" >Küçük</Label>
                                 </FormGroup>
                                 <FormGroup check>
-                                    <Input type="radio" name="size" id="sizeMedium" value="medium" checked={formData.size === "medium"} onChange={handleChange} required />
+                                    <Input type="radio" name="size" id="sizeMedium" value="Orta" checked={formData.size === "Orta"} onChange={handleChange} required />
                                     <Label check htmlFor="sizeMedium" className="order-text" >Orta</Label>
                                 </FormGroup>
                                 <FormGroup check>
-                                    <Input type="radio" name="size" id="sizeLarge" value="large" checked={formData.size === "large"} onChange={handleChange} required />
+                                    <Input type="radio" name="size" id="sizeLarge" value="Büyük" checked={formData.size === "Büyük"} onChange={handleChange} required />
                                     <Label check htmlFor="sizeLarge" className="order-text" >Büyük</Label>
                                 </FormGroup>
                                 {errors.sizeError && (
@@ -134,11 +142,11 @@ export default function OrderPage() {
                                 <Label className="form-heading" htmlFor="dough">Hamur Seç <span className="required" >*</span></Label>
                                 <Input id="dough" name="dough" type="select" value={formData.dough} onChange={handleChange} required>
                                     <option value="" disabled>Hamur Kalınlığı</option>
-                                    <option value="thin">İnce Hamur</option>
-                                    <option value="extra-thin">Extra İnce Hamur</option>
-                                    <option value="standard">Standart Hamur</option>
-                                    <option value="thick">Kalın Hamur</option>
-                                    <option value="extra-thick">Extra Kalın Hamur</option>
+                                    <option value="İnce Hamur">İnce Hamur</option>
+                                    <option value="Extra İnce Hamur">Extra İnce Hamur</option>
+                                    <option value="Standart Hamur">Standart Hamur</option>
+                                    <option value="Kalın Hamur">Kalın Hamur</option>
+                                    <option value="Extra Kalın Hamur">Extra Kalın Hamur</option>
                                 </Input>
                                 {errors.doughError && (
                                     <FormFeedback style={{ display: "block" }}>
@@ -219,19 +227,7 @@ export default function OrderPage() {
                             </div>
 
                             {/* Toplam Fiyat */}
-                            <div className="totalprice-container">
-                                <FormGroup>
-                                <h3 className="form-heading">Sipariş Toplamı</h3>
-                                <div className="row-selecteds">
-                                    <span className="selecteds-text">Seçimler</span>
-                                    <span className="selecteds-price">{selecteds}₺</span>
-                                </div>
-                                <div className="row-total">
-                                    <span className="total-text">Toplam</span>
-                                    <span className="total-price">{totalPrice.toFixed(2)}₺</span>
-                                </div>
-                                </FormGroup>
-                            </div>
+                            <TotalPriceBox selecteds={selecteds} totalPrice={totalPrice} />
 
                             {/* Submit Button */}      
                             <div className="submitbutton-container">
