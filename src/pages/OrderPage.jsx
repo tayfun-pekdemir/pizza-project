@@ -3,12 +3,13 @@ import { Form, FormGroup, Label, Input, Button, FormFeedback } from "reactstrap"
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import TotalPriceBox from "../components/TotalPriceBox";
+import Footer from "../components/Footer";
 
-export default function OrderPage({setOrder}) {
+export default function OrderPage({ setOrder }) {
 
     const pizzaPrice = 85.50
     const extras = ["Pepperoni", "Sosis", "Kanada Jambonu", "Tavuk Izgara", "Soğan", "Domates", "Mısır", "Sucuk", "Jalepeno", "Sarımsak", "Biber", "Maydonoz", "Ananas", "Kabak"];
-    const product = "Position Absolute Acı Pizza" ;
+    const product = "Position Absolute Acı Pizza";
     const history = useHistory();
 
     const [formData, setFormData] = useState({
@@ -80,29 +81,29 @@ export default function OrderPage({setOrder}) {
         event.preventDefault();
         axios.post("https://reqres.in/api/pizza", formData, { headers: { "x-api-key": "reqres-free-v1" } })
             .then(response => {
-                console.log(response.data) ;
+                console.log(response.data);
                 const orderData = {
                     ...response.data,
                     totalPrice,
                     selecteds,
                     product
                 };
-                setOrder(orderData) ;
-                history.push("/success") ;
+                setOrder(orderData);
+                history.push("/success");
             })
             .catch(error => {
-                console.error(error) ;
-                alert("Sipariş gönderilemedi. Lütfen tekrar deneyin.") ;
+                console.error(error);
+                alert("Sipariş gönderilemedi. Lütfen tekrar deneyin.");
             })
     }
 
     return (
-        <main className="order-page">
+        <div className="order-page">
             <header className="order-header">
                 <img src="../images/iteration-1-images/logo.svg" alt="Logo" />
                 <p className="direction-text">Anasayfa - <span className="direction-bold">Sipariş Oluştur</span></p>
             </header>
-            <section className="order-container">
+            <main className="order-container">
                 <div className="order-detail">
                     <h2 className="form-heading">{product}</h2>
                     <div className="orderdetail-row">
@@ -171,8 +172,8 @@ export default function OrderPage({setOrder}) {
                                             id={`extra-${index}`}
                                             checked={formData.selectedExtras.includes(e)}
                                             onChange={handleChange}
-                                            disabled={!formData.selectedExtras.includes(e) && formData.selectedExtras.length >= 10} 
-                                            />
+                                            disabled={!formData.selectedExtras.includes(e) && formData.selectedExtras.length >= 10}
+                                        />
                                         <Label check htmlFor={`extra-${index}`}>{e}</Label>
                                     </FormGroup>
                                 ))}
@@ -188,9 +189,9 @@ export default function OrderPage({setOrder}) {
                             <Label className="form-heading" htmlFor="name">İsim<span className="required" > *</span></Label>
                             <Input type="text" id="name" name="name" value={formData.name} onChange={handleChange} invalid={errors.nameError !== ""} required></Input>
                             {errors.nameError && (
-                                    <FormFeedback >
-                                        {errors.nameError}
-                                    </FormFeedback>)}
+                                <FormFeedback >
+                                    {errors.nameError}
+                                </FormFeedback>)}
                         </FormGroup>
 
                         {/* Sipariş Notu */}
@@ -213,32 +214,35 @@ export default function OrderPage({setOrder}) {
                             {/* Adet ve Submit */}
                             <div className="quantity-container" >
                                 <FormGroup className="quantity-btn-input">
-                                <Button className="dec-button mb-0" type="button" onClick={decreaseQuantity}>-</Button>
-                                <Input
-                                    id="quantity"
-                                    name="quantity"
-                                    className="quantity-input"
-                                    type="text"
-                                    value={formData.quantity}
-                                    readOnly
-                                />
-                                <Button className="inc-button mb-0" type="button" onClick={increaseQuantity}>+</Button>
+                                    <Button className="dec-button mb-0" type="button" onClick={decreaseQuantity}>-</Button>
+                                    <Input
+                                        id="quantity"
+                                        name="quantity"
+                                        className="quantity-input"
+                                        type="text"
+                                        value={formData.quantity}
+                                        readOnly
+                                    />
+                                    <Button className="inc-button mb-0" type="button" onClick={increaseQuantity}>+</Button>
                                 </FormGroup>
                             </div>
 
                             {/* Toplam Fiyat */}
                             <TotalPriceBox selecteds={selecteds} totalPrice={totalPrice} />
 
-                            {/* Submit Button */}      
+                            {/* Submit Button */}
                             <div className="submitbutton-container">
-                                    <Button className="submitbutton" type="submit" disabled={!isValid}>
+                                <Button className="submitbutton" type="submit" disabled={!isValid}>
                                     SİPARİŞ VER
-                                    </Button>
+                                </Button>
                             </div>
                         </div>
                     </Form>
                 </div>
-            </section>
-        </main>
+            </main>
+            <Footer />
+        </div>
+
+
     )
 }

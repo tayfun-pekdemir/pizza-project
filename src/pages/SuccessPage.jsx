@@ -1,7 +1,9 @@
+import Footer from "../components/Footer";
 import TotalPriceBox from "../components/TotalPriceBox";
 
 export default function SuccessPage({ order }) {
     return (
+        <>
         <div className="success-page">
             <img src="../images/iteration-1-images/logo.svg" alt="Logo" />
             <h3 className="decorativeHeading">lezzetin yolda</h3>
@@ -16,6 +18,10 @@ export default function SuccessPage({ order }) {
                 </div>
                 <TotalPriceBox selecteds={order?.selecteds} totalPrice={order?.totalPrice} bgColor="#CE2829" color="#FAF7F2" border="1px solid #FAF7F2" width="100%" />
             </div>
+            
         </div>
+        
+            <Footer/>
+            </>
     )
 }
