@@ -17,15 +17,15 @@ export default function Footer() {
                             <img src="../../images/iteration-2-images/footer/logo-footer.svg" alt="Logo" className="footer-logo" />
                             <div className="footer-address">
                                 <div className="address-item">
-                                    <img src="images\iteration-2-images\footer\icons\icon-1.png" alt="Adres" />
+                                    <img src="images/iteration-2-images/footer/icons/icon-1.png" alt="Adres" />
                                     <span>123 Pizza Sokak,<br/> Istanbul Türkiye</span>
                                 </div>
                                 <div className="address-item">
-                                    <img src="images\iteration-2-images\footer\icons\icon-2.png" alt="Telefon" />
+                                    <img src="images/iteration-2-images/footer/icons/icon-2.png" alt="Telefon" />
                                     <span>+90 555 123 4567</span>
                                 </div>
                                 <div className="address-item">
-                                    <img src="images\iteration-2-images\footer\icons\icon-3.png" alt="E-posta" />
+                                    <img src="images/iteration-2-images/footer/icons/icon-3.png" alt="E-posta" />
                                     <span>pizza@teknolojikyemekler.com</span>
                                 </div>
                                 </div>
